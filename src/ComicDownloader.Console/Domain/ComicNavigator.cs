@@ -30,7 +30,7 @@ namespace ComicDownloader.Console.Domain
             }
         }
 
-        public void DownloadAllIssues(string title)
+        public int DownloadAllIssues(string title)
         {
             using (var driver = new ChromeDriver(ChromeDriverDirectory))
             {
@@ -43,12 +43,14 @@ namespace ComicDownloader.Console.Domain
                 {
                     DownloadAllIssuePages(driver, title, issueCount);
                 }
+
+                return totalIssueCount;
             }
         }
 
         void DownloadAllIssuePages(IWebDriver driver, string title, int issue)
         {
-            var downloadPath = Path.Combine(_downloadFolder, title, issue.ToString());
+            var downloadPath = Path.Combine(_downloadFolder, title, issue.ToString("D3"));
 
             if (!Directory.Exists(downloadPath))
             {

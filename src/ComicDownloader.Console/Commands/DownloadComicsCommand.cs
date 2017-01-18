@@ -33,16 +33,19 @@ namespace ComicDownloader.Console.Commands
                 }
 
                 var comicNavigator = new ComicNavigator(DownloadFolder);
+                var cbzCreator = new CbzCreator(DownloadFolder);
 
                 if (Issues == null || !Issues.Any())
                 {
-                    comicNavigator.DownloadAllIssues(Title);
+                    var totalIssueCount = comicNavigator.DownloadAllIssues(Title);
+                    cbzCreator.CreateIssues(Title, Enumerable.Range(1, totalIssueCount));
 
                     System.Console.WriteLine($"Downloaded all issues of the comic book '{Title}'.");
                 }
                 else
                 {
                     comicNavigator.DownloadIssues(Title, Issues);
+                    cbzCreator.CreateIssues(Title, Issues);
 
                     System.Console.WriteLine($"Downloaded issue(s) {string.Join(", ", Issues)} of the comic book '{Title}'.");
                 }

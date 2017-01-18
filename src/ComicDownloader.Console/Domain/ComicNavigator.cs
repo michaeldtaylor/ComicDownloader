@@ -69,7 +69,7 @@ namespace ComicDownloader.Console.Domain
         static void DownloadPage(string title, int issue, int page, string downloadPath)
         {
             var imageUri = ReadComicsTvApi.BuildComicPageUri(title, issue, page);
-            var localFileName = Path.GetFileName(imageUri.LocalPath);
+            var localFileName = $"{title}_{issue:D3}_{page:D3}.jpg";
             var localPath = Path.Combine(downloadPath, localFileName);
 
             using (var client = new WebClient())

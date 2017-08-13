@@ -6,31 +6,26 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 
-namespace ComicDownloader.Console.Domain
+namespace ComicDownloader.Console.Domain.Providers.ReadComicsTv
 {
-    public class ComicNavigator
+    public class ReadComicsTvComicProvider : IComicProvider
     {
-        static readonly string ChromeDriverDirectory = Path.Combine(Environment.CurrentDirectory, "lib");
+        private static readonly string ChromeDriverDirectory = Path.Combine(Environment.CurrentDirectory, "lib");
 
-        readonly string _downloadFolder;
+        public string ServiceName => "read-comics-tv";
 
-        public ComicNavigator(string downloadFolder)
-        {
-            _downloadFolder = downloadFolder;
-        }
-
-        public void DownloadIssues(string title, IEnumerable<int> issues)
+        public void DownloadIssues(string title, IEnumerable<int> issues, string downloadFolder)
         {
             using (var driver = new ChromeDriver(ChromeDriverDirectory))
             {
                 foreach (var issue in issues)
                 {
-                    DownloadAllIssuePages(driver, title, issue);
+                    DownloadAllIssuePages(driver, title, issue, downloadFolder);
                 }
             }
         }
 
-        public int DownloadAllIssues(string title)
+        public int DownloadAllIssues(string title, string downloadFolder)
         {
             using (var driver = new ChromeDriver(ChromeDriverDirectory))
             {
@@ -41,16 +36,16 @@ namespace ComicDownloader.Console.Domain
 
                 for (var issueCount = 1; issueCount <= totalIssueCount; issueCount++)
                 {
-                    DownloadAllIssuePages(driver, title, issueCount);
+                    DownloadAllIssuePages(driver, title, issueCount, downloadFolder);
                 }
 
                 return totalIssueCount;
             }
         }
 
-        void DownloadAllIssuePages(IWebDriver driver, string title, int issue)
+        private void DownloadAllIssuePages(IWebDriver driver, string title, int issue, string downloadFolder)
         {
-            var downloadPath = Path.Combine(_downloadFolder, title, issue.ToString("D3"));
+            var downloadPath = Path.Combine(downloadFolder, title, issue.ToString("D3"));
 
             if (!Directory.Exists(downloadPath))
             {
@@ -68,7 +63,7 @@ namespace ComicDownloader.Console.Domain
             }
         }
 
-        static void DownloadPage(string title, int issue, int page, string downloadPath)
+        private static void DownloadPage(string title, int issue, int page, string downloadPath)
         {
             var imageUri = ReadComicsTvApi.BuildComicPageUri(title, issue, page);
             var localFileName = $"{title}_{issue:D3}_{page:D3}.jpg";
@@ -80,12 +75,12 @@ namespace ComicDownloader.Console.Domain
             }
         }
 
-        static SelectElement GetPageSelector(ISearchContext driver)
+        private static SelectElement GetPageSelector(ISearchContext driver)
         {
             return new SelectElement(driver.FindElement(By.Name("page_select")));
         }
 
-        static SelectElement GetIssueSelector(ISearchContext driver)
+        private static SelectElement GetIssueSelector(ISearchContext driver)
         {
             return new SelectElement(driver.FindElement(By.Name("chapter_select")));
         }

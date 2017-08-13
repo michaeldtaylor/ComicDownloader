@@ -6,20 +6,13 @@ namespace ComicDownloader.Console.Domain
 {
     public class CbzCreator
     {
-        readonly string _downloadFolder;
-
-        public CbzCreator(string downloadFolder)
-        {
-            _downloadFolder = downloadFolder;
-        }
-
-        public void CreateIssues(string title, IEnumerable<int> issues)
+        public void CreateIssues(string title, IEnumerable<int> issues, string issueFolder)
         {
             foreach (var issue in issues)
             {
-                var issuePath = Path.Combine(_downloadFolder, title, issue.ToString("D3"));
+                var issuePath = Path.Combine(issueFolder, title, issue.ToString("D3"));
                 var destinationFileName = $"{title}_{issue:D3}.cbz";
-                var destinationArchiveFileName = Path.Combine(_downloadFolder, title, destinationFileName);
+                var destinationArchiveFileName = Path.Combine(issueFolder, title, destinationFileName);
 
                 if (File.Exists(destinationArchiveFileName))
                 {

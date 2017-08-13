@@ -1,10 +1,10 @@
 using System;
 
-namespace ComicDownloader.Console.Domain
+namespace ComicDownloader.Console.Domain.Providers.ReadComicsTv
 {
     public static class ReadComicsTvApi
     {
-        static readonly Uri BaseUri = new Uri("http://www.readcomics.tv/");
+        private static readonly Uri BaseUri = new Uri("http://www.readcomics.tv/");
 
         public static Uri BuildComicIssueUri(string title, int issue)
         {

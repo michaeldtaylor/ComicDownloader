@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ManyConsole;
 
-namespace ComicDownloader.Console.Commands
+namespace ComicDownloader.Console.Domain
 {
     public static class IssueRangeParser
     {
@@ -15,9 +15,8 @@ namespace ComicDownloader.Console.Commands
             }
 
             var results = new List<int>();
-            int singleIssue;
             
-            if (int.TryParse(issueSelector, out singleIssue))
+            if (int.TryParse(issueSelector, out int singleIssue))
             {
                 results.Add(singleIssue);
 
@@ -41,16 +40,12 @@ namespace ComicDownloader.Console.Commands
                     throw new ConsoleHelpAsException($"The issue selector is invalid (Range = '{multipleIssuePart}').");
                 }
 
-                int minRange;
-
-                if (!int.TryParse(rangeIssueParts[0], out minRange))
+                if (!int.TryParse(rangeIssueParts[0], out int minRange))
                 {
                     throw new ConsoleHelpAsException($"The issue selector is invalid (Range = '{multipleIssuePart}', Minimum = '{rangeIssueParts[0]}').");
                 }
 
-                int maxRange;
-                
-                if (!int.TryParse(rangeIssueParts[1], out maxRange))
+                if (!int.TryParse(rangeIssueParts[1], out int maxRange))
                 {
                     throw new ConsoleHelpAsException($"The issue selector is invalid (Range = '{multipleIssuePart}', Maximum = '{rangeIssueParts[1]}').");
                 }
@@ -64,7 +59,7 @@ namespace ComicDownloader.Console.Commands
             return results;
         }
 
-        static void AddIfNotExists(ICollection<int> results, int result)
+        private static void AddIfNotExists(ICollection<int> results, int result)
         {
             if (!results.Contains(result))
             {

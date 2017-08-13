@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using ComicDownloader.Console.Domain.Providers;
 using ManyConsole;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using StructureMap;
 
 namespace ComicDownloader.Console
 {
-    public class Program
+    internal class Program
     {
         public static int Main(string[] args)
         {
@@ -15,13 +18,28 @@ namespace ComicDownloader.Console
                 Converters = new List<JsonConverter> { new StringEnumConverter() }
             };
 
-            var commands = ConsoleCommandDispatcher.FindCommandsInSameAssemblyAs(typeof(Program));
-            var result = ConsoleCommandDispatcher.DispatchCommand(commands, args, System.Console.Out);
+            var container = new Container(_ =>
+            {
+                _.Scan(x =>
+                {
+                    x.TheCallingAssembly();
+                    x.AddAllTypesOf(typeof(IComicProvider));
+                    x.WithDefaultConventions();
+                });
+            });
 
-            System.Console.WriteLine("Press any key to continue...");
-            System.Console.ReadLine();
+            try
+            {
+                var commands = StructureMapCommandProvider.FindCommandsInSameAssemblyUsingStructureMap(typeof(Program), container);
 
-            return result;
+                return ConsoleCommandDispatcher.DispatchCommand(commands, args, System.Console.Out);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex);
+
+                return -1;
+            }
         }
     }
 }

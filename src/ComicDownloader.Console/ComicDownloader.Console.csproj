@@ -67,6 +67,8 @@
     <Compile Include="Commands\DownloadComicsCommand.cs" />
     <Compile Include="Domain\IssueRangeParser.cs" />
     <Compile Include="Domain\Providers\IComicProvider.cs" />
+    <Compile Include="Domain\Providers\ViewComicCom\ViewComicComApi.cs" />
+    <Compile Include="Domain\Providers\ViewComicCom\ViewComicComComicProvider.cs" />
     <Compile Include="Infrastructure\ComicFileLoader.cs" />
     <Compile Include="Domain\Providers\ReadComicsTv\ReadComicsTvApi.cs" />
     <Compile Include="Domain\Providers\ReadComicsTv\ReadComicsTvComicProvider.cs" />

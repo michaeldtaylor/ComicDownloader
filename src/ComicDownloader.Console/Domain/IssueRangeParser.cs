@@ -7,20 +7,20 @@ namespace ComicDownloader.Console.Domain
 {
     public static class IssueRangeParser
     {
-        public static IEnumerable<int> Parse(string issueSelector)
+        public static int[] Parse(string issueSelector)
         {
+            var results = new List<int>();
+            
             if (string.IsNullOrEmpty(issueSelector))
             {
-                return Enumerable.Empty<int>();
+                return results.ToArray();
             }
-
-            var results = new List<int>();
             
             if (int.TryParse(issueSelector, out int singleIssue))
             {
                 results.Add(singleIssue);
 
-                return results;
+                return results.ToArray();
             }
 
             var multipleIssueParts = issueSelector.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList();
@@ -56,7 +56,7 @@ namespace ComicDownloader.Console.Domain
                 }
             }
 
-            return results;
+            return results.ToArray();
         }
 
         private static void AddIfNotExists(ICollection<int> results, int result)

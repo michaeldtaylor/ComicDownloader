@@ -29,7 +29,7 @@ namespace ComicDownloader.Console.Commands
 
         public string Title { get; set; }
 
-        public IEnumerable<int> Issues { get; set; }
+        public int[] Issues { get; set; }
 
         public string ComicProvider { get; set; }
 
@@ -52,14 +52,14 @@ namespace ComicDownloader.Console.Commands
 
                     _cbzCreator.CreateIssues(Title, Enumerable.Range(1, totalIssueCount), DownloadFolder);
 
-                    System.Console.WriteLine($"Downloaded all issues of the comic book '{Title}'.");
+                    System.Console.WriteLine($"Downloaded all issues of the comic book '{Title}' from '{ComicProvider}'.");
                 }
                 else
                 {
                     comicProvider.DownloadIssues(Title, Issues, DownloadFolder);
                     _cbzCreator.CreateIssues(Title, Issues, DownloadFolder);
 
-                    System.Console.WriteLine($"Downloaded issue(s) {string.Join(", ", Issues)} of the comic book '{Title}'.");
+                    System.Console.WriteLine($"Downloaded issue(s) {string.Join(", ", Issues)} of the comic book '{Title}' from '{ComicProvider}'.");
                 }
             }
             catch (Exception ex)
